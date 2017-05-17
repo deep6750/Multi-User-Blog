@@ -306,54 +306,31 @@ class DeletePost(Handler):
     def get(self, post_id):
         key = db.Key.from_path('Post', int(post_id), parent=blog_key())
         post = db.get(key)
-        author = self.logged()
-        if not post:
-
-           
-
-            self.error(404)
-            return
+        user = self.logged()
+        if post.author == user:
+        	if not post:
+	        	self.error(404)
+	        else:
+	            self.render('post.html', post=post)
+	            post.delete()
+	            self.redirect('/')
         else:
-            self.render('post.html', post=post)
-            if post.author == author:
-
-             
-
-                post.delete()
-                self.redirect('/')
-            else:
-                self.redirect('/%s?error=notPostOwner')
+        	self.redirect('/%s?error=notPostOwner')
 
 
 class NewPost(Handler):
 
     def get(self):
-      
-       
-       
-
         if self.logged():
-
-      
-
             self.render('new.html', user=self.logged())
         else:
             self.redirect('/login')
 
     def post(self):
-
-        
-
         subject = self.request.get('subject')
         content = self.request.get('content')
-
-      
-
         if subject and content:
             if self.logged():
-
-       
-
                 content = content.replace('\n', '<br>')
                 p = Post(parent=blog_key(), subject=subject,
                          content=content, author=self.logged(),
@@ -370,26 +347,15 @@ class NewPost(Handler):
 class EditPost(Handler):
 
     def get(self, post_id):
-        
-
         user = self.logged()
         if user:
-
-      
-
             pkey = db.Key.from_path('Post', int(post_id),
                                     parent=blog_key())
             post = db.get(pkey)
             if not post:
-
-
-
                 self.error(404)
                 return
             if user != post.author:
-
-       
-
                 self.redirect('/%s?error=notPostOwner' % post_id)
             else:
                 self.render('edit.html', user=self.logged(), post=post)
@@ -397,39 +363,21 @@ class EditPost(Handler):
             self.redirect('/login')
 
     def post(self, post_id):
-
-     
-
         subject = self.request.get('subject')
         content = self.request.get('content')
         user = self.logged()
         if subject and content:
-
-
-
             if user:
-
-
-
                 pkey = db.Key.from_path(
                     'Post', int(post_id),
                     parent=blog_key())
                 post = db.get(pkey)
                 if not post:
-
-              
-
                     self.error(404)
                     return
                 if user != post.author:
-
-                 
-
                     self.redirect('/%s?error=notPostOwner' % post_id)
                 else:
-
-                 
-
                     content = content.replace('\n', '<br>')
                     post.content = content
                     post.subject = subject
@@ -447,25 +395,16 @@ class DeleteComment(Handler):
     def get(self, post_id, comment_id):
         user = self.logged()
         if user:
-
-     
-
             pkey = db.Key.from_path('Post', int(post_id),
                                     parent=blog_key())
             post = db.get(pkey)
             if not post:
-
-           
-
                 self.error(404)
                 return
             key = db.Key.from_path('Comments', int(comment_id),
                                    parent=pkey)
             comment = db.get(key)
             if user == comment.author:
-
-
-
                 comment.delete()
                 self.redirect('/%s' % post_id)
             else:
@@ -479,25 +418,16 @@ class EditComment(Handler):
     def get(self, post_id, comment_id):
         user = self.logged()
         if user:
-
-       
-
             pkey = db.Key.from_path('Post', int(post_id),
                                     parent=blog_key())
             post = db.get(pkey)
             if not post:
-
-         
-
                 self.error(404)
                 return
             key = db.Key.from_path('Comments', int(comment_id),
                                    parent=pkey)
             comment = db.get(key)
             if user == comment.author:
-
-
-
                 self.render('editcomment.html', user=user,
                             comment=comment)
             else:
@@ -506,51 +436,34 @@ class EditComment(Handler):
     def post(self, post_id, comment_id):
         user = self.logged()
         if user:
-
-            
-
             pkey = db.Key.from_path('Post', int(post_id),
                                     parent=blog_key())
             post = db.get(pkey)
             if not post:
-
-            
-
                 self.error(404)
                 return
             key = db.Key.from_path('Comments', int(comment_id),
                                    parent=pkey)
             comment = db.get(key)
             if user == comment.author:
-
-
-
                 content = self.request.get('comment')
                 if content:
-
-
-
                     comment.content = content
                     comment.put()
                     self.redirect('/%s' % post_id)
                 else:
                     self.redirect('/%s?error=emptyCmnt' % post_id)
             else:
-
                 self.redirect('/%s?error=notCmntOwner' % post_id)
 
 
 class Signup(Handler):
 
-    def get(self):
-
-        
+    def get(self):       
 
         self.render('signup.html')
 
     def post(self):
-
- 
 
         email = self.request.get('email')
         username = self.request.get('username')
@@ -558,20 +471,14 @@ class Signup(Handler):
         vpass = self.request.get('verify')
         if not email and username and password and vpass:
 
-
-
             error = ' All fields are required'
             self.render('signup.html', error=error)
-        elif not password == vpass:
-
-          
+        elif not password == vpass:         
 
             error = 'Passwords do not match'
             self.render('signup.html', error=error)
         else:
-            if User_db.all().filter('email = ', email).get():
-
-               
+            if User_db.all().filter('email = ', email).get():              
 
                 error = 'Email Already existing'
                 self.render('signup.html', error=error)
@@ -594,43 +501,30 @@ class Signup(Handler):
 
 class Login(Handler):
 
-    def get(self):
-
-   
+    def get(self):  
 
         self.render('login.html')
 
-    def post(self):
-
-       
+    def post(self):      
 
         username = self.request.get('username')
         password = self.request.get('password')
         if not username and password:
-
-
-
             error = ' Enter both password and username '
             self.render('login.html', error=error)
         else:
             user = User_db.all().filter('username = ', username).get()
-            if not user:
-
-                
+            if not user:             
 
                 error = 'User does not exsist !'
                 self.render('login.html', error=error)
             else:
                 password = hash_password(password)
-                if user.password_hash != password:
-
-                   
+                if user.password_hash != password:                  
 
                     error = 'Password Incorrect !'
                     self.render('login.html', error=error)
-                else:
-
-                    
+                else:                   
 
                     self.login(user)
 
@@ -642,7 +536,7 @@ class Logout(Handler):
 
         if self.logged():
             self.set_secure_cookie('username', '')
-            self.redirect('/')
+            self.redirect('/login')
         else:
             self.redirect('/login')
 

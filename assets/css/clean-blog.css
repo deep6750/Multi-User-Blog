@@ -272,7 +272,7 @@ h6 {
 
 .post-preview>.post-meta>a:hover,
 .post-preview>.post-meta>a:focus {
-    color:  #00A17D;
+    color: #00A17D;
     text-decoration: underline;
 }
 
@@ -367,7 +367,7 @@ footer .copyright {
 }
 
 .floating-label-form-group-with-focus label {
-    color:  #00A17D;
+    color: #00A17D;
 }
 
 form .row:first-child .floating-label-form-group {
@@ -391,8 +391,8 @@ form .row:first-child .floating-label-form-group {
 
 .btn-default:hover,
 .btn-default:focus {
-    background-color:  #00A17D;
-    border: 1px solid  #00A17D;
+    background-color: #00A17D;
+    border: 1px solid #00A17D;
     color: white;
 }
 
@@ -415,8 +415,8 @@ form .row:first-child .floating-label-form-group {
 .pager li>a:hover,
 .pager li>a:focus {
     color: white;
-    background-color:  #00A17D;
-    border: 1px solid  #00A17D;
+    background-color: #00A17D;
+    border: 1px solid #00A17D;
 }
 
 .pager .disabled>a,
@@ -431,17 +431,17 @@ form .row:first-child .floating-label-form-group {
 ::-moz-selection {
     color: white;
     text-shadow: none;
-    background:  #00A17D;
+    background: #00A17D;
 }
 
 ::selection {
     color: white;
     text-shadow: none;
-    background:#00A17D;
+    background: #00A17D;
 }
 
 body {
-    -webkit-tap-highlight-color:#00A17D;
+    -webkit-tap-highlight-color: #00A17D;
 }
 
 .comments {
@@ -483,6 +483,7 @@ body {
     border: 1px solid #e5e5e5;
     border-radius: 5px;
     background: #fff;
+    color: black;
 }
 
 .comment .text p:last-child {
