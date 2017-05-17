@@ -1,0 +1,40 @@
+
+{% extends "base.html" %}
+{% block content %}
+    <!-- Page Header -->
+    <!-- Set your background image for this header on the line below. -->
+    <header class="intro-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <div class="site-heading">
+                        <h2>Start Blogging Today</h2>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+              {% for p in posts %}
+                <div class="post-preview">
+                    <a href="/{{p.key().id() }}">
+                        <h2 class="post-title">
+                            {{ p.subject }}
+                        </h2>
+
+                    </a>
+                    <p class="post-meta">Post by <a href="/">{{ p.author }}</a> on {{ p.last_modified.strftime("%b %d, %Y") }} </p>
+                </div>
+                <hr>
+              {% endfor %}
+                <!-- Pager -->
+                
+            </div>
+        </div>
+    </div>
+{% endblock %}

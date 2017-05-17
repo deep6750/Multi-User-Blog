@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block content %}
+     <header class="intro-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <div class="post-heading">
+                        <h1> {{ post.subject }} </h1>
+                        <span class="meta">Post by <a href="/"> {{ post.author }} </a> on {{ post.created.strftime("%b %d, %Y") }} 
+                        {% if post.author == user %}
+                         | <a href="/edit:{{ post.key().id() }}">Edit</a> | <a href="/delete:{{ post.key().id() }}"> Delete</a>
+                        {% endif %}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <article>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    {{ post.content | safe }}
+                </div>
+            </div>
+        </div>
+    </article>
+    <hr class="hr-comment">
+    
+   <div class = "like">
+      <a href="/like:{{ post.key().id() }}">
+         <i class="i 
+          {% if like %}
+              press
+          {% endif %}"></i>
+    </a>
+      <span>{{ post.post_likes }} Likes </span>
+    </div>
+    
+    <hr class="hr-comment">
+    <div class="error container">
+        <div class="row">
+            <div class="col-md-offset-3 col-md-6">
+                <div class="alert alert-danger hide" role="alert" id="message">
+                </div>
+            </div>
+        </div>
+    </div>
+    {% for comment in comments %}
+
+    <section class="comments">
+	    <article class="comment">
+                <div class="comment-body">
+                    <div class="text">
+                      <p>{{ comment.content }}</p>
+                    </div>
+                    <p class="attribution">by <a>{{ comment.author }}</a> at {{ comment.last_modified.strftime("%b %d, %Y") }}
+                    {% if comment.author == user %}
+                     | <a href="/editcomment:{{ post.key().id() }}&{{ comment.key().id() }}">Edit</a> | <a href="/deletecomment:{{ post.key().id() }}/{{ comment.key().id() }}"> Delete</a>
+                    {% endif %}
+                     </p>
+                </div>
+        </article>
+    </section>
+    {% endfor %}
+    {% if user %}
+    
+    <div class="container margin-bottom">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                   <form method="post">
+                    <div class="input-group">
+                      <input type="text" class="form-control" placeholder="Write your Comment..." name="comment" required>
+                      <span class="input-group-btn">
+                        <button class="btn btn-default no-padding" type="submit">Submit</button>
+                      </span>
+                    </div>
+                  </form>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
